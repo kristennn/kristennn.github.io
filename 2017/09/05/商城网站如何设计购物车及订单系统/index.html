@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="技术 Ruby," />
 
 
 
@@ -95,14 +95,20 @@
 
 
 
+<meta name="description" content="对于购物车设计的理解： 主要的思路是这样：购物车最难的部分有两点：购物车这个model应该来怎么设计；及“将商品将入购物车”这个动作该如何实现。现在我们来一个一个解决：">
+<meta name="keywords" content="技术 Ruby">
 <meta property="og:type" content="article">
 <meta property="og:title" content="商城网站如何设计购物车及订单系统">
 <meta property="og:url" content="http://yoursite.com/2017/09/05/商城网站如何设计购物车及订单系统/index.html">
 <meta property="og:site_name" content="Kristen&#39;s Life">
+<meta property="og:description" content="对于购物车设计的理解： 主要的思路是这样：购物车最难的部分有两点：购物车这个model应该来怎么设计；及“将商品将入购物车”这个动作该如何实现。现在我们来一个一个解决：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-05T07:17:43.000Z">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNc79gy1fh6on5d121j309104z0st.jpg">
+<meta property="og:updated_time" content="2017-09-05T08:02:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="商城网站如何设计购物车及订单系统">
+<meta name="twitter:description" content="对于购物车设计的理解： 主要的思路是这样：购物车最难的部分有两点：购物车这个model应该来怎么设计；及“将商品将入购物车”这个动作该如何实现。现在我们来一个一个解决：">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/006tNc79gy1fh6on5d121j309104z0st.jpg">
 
 
 
@@ -325,6 +331,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -352,7 +380,59 @@
       
 
       
-        
+        <h1 id="对于购物车设计的理解："><a href="#对于购物车设计的理解：" class="headerlink" title="对于购物车设计的理解："></a>对于购物车设计的理解：</h1><p> 主要的思路是这样：购物车最难的部分有两点：购物车这个model应该来怎么设计；及“将商品将入购物车”这个动作该如何实现。现在我们来一个一个解决：<br> <a id="more"></a></p>
+<ol>
+<li>首先来设计购物车model。在设计之前，我们可以来思考一下，设计了model要用来做实现什么？我的思考结果是这样的：1. 可以实现“将商品加入购物车”的动作 2. 可以显示购物车的商品信息并对其进行操作<br>可以回想一下我们去超市的经历。比如说，我拿了两盒酸奶，一包饼干，去收银台结算。付过钱之后我拿到了小票，小票上的内容会是这样子：<br><img src="http://ww4.sinaimg.cn/large/006tNc79gy1fh6on5d121j309104z0st.jpg" alt=""><br>你应该从来没有见过有哪一家超市把两盒酸奶分开成两行来写的把？<br>这么一来，我们就有了思路，我们在JDstore里购买东西，购物车也是这个样子的，一个购物车（cart）里会有很多类商品(cart_item)，而每一类商品(cart_item)都包括两个信息，一个是商品（product_id），一个是商品数量(quantity)。<br>（1） 现在我们来设计model。我们需要两个model，一个是cart，不需要栏位（因为所有需要的信息都可以通过cart_item来呼叫）；另一个model是cart_item，需要的栏位有三个：cart_id（要知道这些商品是放在哪个购物车里），product_id，quantity。<br>（2） 然后来设计关联。因为我们希望“可以显示购物车里的商品信息”，也就是说，需要捞出”购物车里的所有商品”这个数据。那应该要怎么捞这个数据呢？可以参考Rails101里，我们是如何捞出“加入群组中的所有成员”的。当时我们使用了“group_relationship”这个model当做一个中间的媒介。那现在，我们也可以使用”cart_item”来作为中间的媒介：</li>
+</ol>
+<figure class="highlight ruby"><figcaption><span>cart.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">has_many <span class="symbol">:cart_items</span></div><div class="line">has_many <span class="symbol">:products</span>, <span class="symbol">through:</span> <span class="symbol">:cart_items</span>, <span class="symbol">source:</span> <span class="symbol">:product</span></div><div class="line"><span class="comment">#这样一来，就可以通过"cart.products"来捞出”购物车内的所有商品“这个数据了。其中第一个products可以换成任何名字，后面需要捞数据时也要对应的换名字；第二个product我自己的理解是指product这个model</span></div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><figcaption><span>cart_item.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">belongs_to <span class="symbol">:cart</span></div><div class="line">belongs_to <span class="symbol">:product</span></div></pre></td></tr></table></figure>
+<p> 注意：为什么这里没有在product.rb里增加关联呢？我的理解是，因为整个购物车设计里，每一个user都只有一个cart，每一个cart_item都只有一个product_id。也就是说，在一个user的登录状态下，一个product_id只能属于一个cart_item，也只能属于一个cart。所以在此不需要建立关联。</p>
+<ol>
+<li>接下来，来解决”将商品加入购物车“的问题。这个问题可以分成两步来想：怎么找到购物车？怎么把商品加入购物车？<br>（1） 在application_controller里定义current_cart，在这里，需要使用session这个东西，关于这个东西是什么，请参照这篇文：</li>
+</ol>
+<figure class="highlight ruby"><figcaption><span>application_controller.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">helper_method <span class="symbol">:current_cart</span></div><div class="line"><span class="comment">#这个方法写在application_controller里，所以所有的controll文件都可使用，加上                             helper_method是为了让所有的views文件都能使用</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">current_cart</span></span></div><div class="line">   current_cart <span class="params">||</span>= find_cart</div><div class="line">   <span class="comment">#可以找到current_cart的话，就返回它，找不到（或者是nil的话，就执行find_cart)</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_cart</span></span></div><div class="line">   @cart = Cart.find_by(<span class="symbol">id:</span> session[<span class="symbol">:cart_id</span>])</div><div class="line">   <span class="comment">#使用session来找cart</span></div><div class="line">   <span class="keyword">if</span> @cart.blank?</div><div class="line">   @cart = Cart.create</div><div class="line">   <span class="keyword">end</span></div><div class="line">   <span class="comment">#找不到就建一个</span></div><div class="line">   session[<span class="symbol">:cart_id</span>] = @cart.id</div><div class="line">   <span class="comment">#登记<span class="doctag">@cart</span>.id作为购物车的session id</span></div><div class="line">   <span class="keyword">return</span> cart</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p> （2） 定义加入购物车的动作：可以这么考虑，因为购物车这个model并没有栏位，它只是有很多个cart_item来组成的，而在user登录状态下，每一个Product都只属于一个cart_item。也就是说，我们每加入一个商品进入购物车，就是在购物车里新增了一个cart_item来存储信息：</p>
+<figure class="highlight ruby"><figcaption><span>cart.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_product_to_cart</span><span class="params">(product)</span></span></div><div class="line">    ci = cart_items.create</div><div class="line">    ci.product = product <span class="comment">#这里=右边的product是括号里那个</span></div><div class="line">    ci.quantity = <span class="number">1</span><span class="comment">#这个表示每点击一次按钮，就加入1个product</span></div><div class="line">    ci.save</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>这些都解决啦，我们就来让按钮动起来吧！给”加入购物车“这个动作增加一个路径，因为是对product进行操作，所以需要在product下面来新增路径，并在products_controller里增加”加入购物车“的方法：</p>
+<figure class="highlight ruby"><figcaption><span>routes.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">resources <span class="symbol">:products</span> <span class="keyword">do</span></div><div class="line">   member <span class="keyword">do</span></div><div class="line">      post <span class="symbol">:add_to_cart</span></div><div class="line">   <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><figcaption><span>products_controller.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_to_cart</span></span></div><div class="line">   @product = Product.find(params[<span class="symbol">:id</span>])</div><div class="line">   current_cart.add_product_to_cart(@product)</div><div class="line">   flash[<span class="symbol">:notice</span>] = <span class="string">"已将加入<span class="subst">#&#123;@product.title&#125;</span>进入购物车”</span></div><div class="line"><span class="string">   redirect_to product_path(@product)</span></div><div class="line"><span class="string">end</span></div></pre></td></tr></table></figure>
+<p>最后，来新增购物车页面，进行小细节的修改，再次就不赘述了。</p>
+<h1 id="对于订单设计的理解："><a href="#对于订单设计的理解：" class="headerlink" title="对于订单设计的理解："></a>对于订单设计的理解：</h1><p>对于订单部分，我们需要实现的主要功能有这些：可以结账，可以看到订单，可以对订单进行支付，下面我们一一来说：</p>
+<ol>
+<li>首先，应该怎么来设计model？想一下我们在网上买东西下过订单之后，这张订单是不是一般都分为两个部分，上面是我这次的购物信息，买了什么商品，多少数量，多少价格，下面是我们自己填写的联络人，联系地址等等。在这里我们需要注意的是，下面部分的联络人信息是我们在下订单时自己填写上去的，而上面的购物信息，则是我们在下订单后系统自动生成的。那么，最好是我们分开用2个model来储存这些信息：</li>
+</ol>
+<p>新增order这个model，栏位有：user_id（谁的订单），total，billing_name, billing_address, shipping_name, shipping_address。第一个model建立完毕</p>
+<p>为什么需要新建model来储存购物信息，而不是通过调用product的信息呢？这个主要是考虑商城里的商品会有下架的可能，如果商品下架，那么订单内的信息也就一起丢失了。而且订单内的购物信息是生成订单当下的商品信息，而不能跟着后续商品的改变而一起改变。因此最好是用一个新的model来储存。</p>
+<p>新增product_list这个model，栏位有：order_id, product_name, product_price, quantity。<br>建立关联：</p>
+<figure class="highlight ruby"><figcaption><span>order.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">has_many <span class="symbol">:product_lists</span></div><div class="line">belongs_to <span class="symbol">:user</span></div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><figcaption><span>product_list.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">belongs_to <span class="symbol">:order</span></div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><figcaption><span>user.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">has_many <span class="symbol">:orders</span></div></pre></td></tr></table></figure>
+<ol>
+<li>model建立好了，接下来我们看下应该怎么来实现”生成订单“这件事。</li>
+</ol>
+<p>关于这个部分，教材的做法是，将新增这个动作分成两部分，new的部分放在carts_controller，使用checkout来作为这个action的name；将create部分放在orders_controller。也就是说，我们在carts/index页面点击结账按钮，会跳转到checkout.html页面（也就是order的new页面）,而在这个页面点击生成订单时，就会直接跳转到订单详情（orders/show页面了）。</p>
+<p>这个做法在我刚开始做时觉得不太好理解，因为之前的专案里从未有过情况是像这样将一个model的new和create分开放在两个controller里的。做了这几遍之后，我发现了其实不一定非要这么做。完全可以按照常规的做法来：</p>
+<figure class="highlight ruby"><figcaption><span>carts/index.html.erb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;%= link_to(<span class="string">"确认结账”, new_order_path, class: "</span>btn btn-lg btn-danger pull-right %&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><figcaption><span>orders_controller.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">new</span></span></div><div class="line">   @order = Order.new</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">create</span></span></div><div class="line">....略</div></pre></td></tr></table></figure>
+<p><code>touch add/views/orders/new.html.erb</code></p>
+<figure class="highlight ruby"><figcaption><span>orders/new.html.erb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#在这里放入之前放在checkout.html.erb里的内容</span></div></pre></td></tr></table></figure>
+<p>这样就大功告成了，和教材的唯一区别就是路径的跳转问题，我的方案里，路径是这样跳转的：<a href="http://localhost:3000/carts" target="_blank" rel="external">http://localhost:3000/carts</a> ==&gt; <a href="http://localhost:3000/orders/new" target="_blank" rel="external">http://localhost:3000/orders/new</a> ==&gt;  <a href="http://localhost:3000/orders/:id" target="_blank" rel="external">http://localhost:3000/orders/:id</a></p>
+<ol>
+<li><p>下面来做支付部分。基本的思路是这样的，就像user有is_admin这个栏位，可以直接在数据库判断是否是管理员一样。order也应该有这么一个栏位，可以判断是不是付款了（如果我们默认只有一种支付方式，那这样就足够了）。如果我们想要既可以使用支付宝，又可以使用微信，那数据库怎么知道你用的是什么呢？所以需要再增加一个栏位，用来判断支付方式。而支付这个动作，就是通过改变这两个栏位的状态来实现</p>
+<p>给order增加栏位：</p>
+</li>
+</ol>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">add_column <span class="symbol">:orders</span>, <span class="symbol">:is_paid</span>, <span class="symbol">:boolean</span>, <span class="symbol">default:</span> <span class="literal">false</span></div><div class="line">add_column <span class="symbol">:orders</span>, <span class="symbol">:payment_method</span>, <span class="symbol">:string</span></div></pre></td></tr></table></figure>
+<p> 接下来，就是在model层面来设计应该怎么样来改变这两个栏位的状态，把这个封装好，这样controller就可以直接用了</p>
+<figure class="highlight ruby"><figcaption><span>order.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">pay!</span></span></div><div class="line">   update_columns(<span class="symbol">is_paid:</span> <span class="literal">true</span>)</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_payment_method!</span><span class="params">(method)</span></span></div><div class="line">   update_columns(<span class="symbol">payment_method:</span> method)</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p> 再来新增路径</p>
+<figure class="highlight ruby"><figcaption><span>routes.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">resources <span class="symbol">:order</span> <span class="keyword">do</span></div><div class="line">   member <span class="keyword">do</span></div><div class="line">      post <span class="symbol">:pay_with_alipay</span></div><div class="line">      post <span class="symbol">:pay_with_wecha</span></div><div class="line">   <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p> 最后来建立controller里的方法：</p>
+<figure class="highlight ruby"><figcaption><span>orders_controller.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">pay_with_alipay</span></span></div><div class="line">   @order = Order.find(params[<span class="symbol">:id</span>])</div><div class="line">   @order.set_payment_method(<span class="string">"alipay"</span>)</div><div class="line">   @order.pay!</div><div class="line">   ** 先后顺序不能反，一定是要先知道用什么付，再告诉数据库订单已经付了 **</div><div class="line">   flash[<span class="symbol">:notice</span>] = <span class="string">"使用支付宝支付成功"</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>这样，订单部分也就完成了</p>
+</blockquote>
+
       
     </div>
     
@@ -366,6 +446,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术-Ruby/" rel="tag"># 技术 Ruby</a>
+          
+        </div>
       
 
       
@@ -436,8 +522,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <p class="site-author-name" itemprop="name">Kristen</p>
@@ -473,7 +568,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -498,6 +593,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对于购物车设计的理解："><span class="nav-number">1.</span> <span class="nav-text">对于购物车设计的理解：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对于订单设计的理解："><span class="nav-number">2.</span> <span class="nav-text">对于订单设计的理解：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

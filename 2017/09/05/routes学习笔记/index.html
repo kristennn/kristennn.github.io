@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="技术 Ruby," />
 
 
 
@@ -95,14 +95,20 @@
 
 
 
+<meta name="description" content="1.在代码get &amp;#39;groups/:id, :to =&amp;gt; &amp;quot;groups#show&amp;quot;里，”groups#show”是指，groups_controller.rb里的show  action。之前一直以为这个地方是指views里，groups文件夹里的show.html.erb文件。 2.routes文件里的内容也是有优先级的，会先执行上面的路径">
+<meta name="keywords" content="技术 Ruby">
 <meta property="og:type" content="article">
 <meta property="og:title" content="routes学习笔记">
 <meta property="og:url" content="http://yoursite.com/2017/09/05/routes学习笔记/index.html">
 <meta property="og:site_name" content="Kristen&#39;s Life">
+<meta property="og:description" content="1.在代码get &amp;#39;groups/:id, :to =&amp;gt; &amp;quot;groups#show&amp;quot;里，”groups#show”是指，groups_controller.rb里的show  action。之前一直以为这个地方是指views里，groups文件夹里的show.html.erb文件。 2.routes文件里的内容也是有优先级的，会先执行上面的路径">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-05T02:38:40.000Z">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNbRwly1fgmbxvcqbfj30ux01iaar.jpg">
+<meta property="og:updated_time" content="2017-09-05T08:03:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="routes学习笔记">
+<meta name="twitter:description" content="1.在代码get &amp;#39;groups/:id, :to =&amp;gt; &amp;quot;groups#show&amp;quot;里，”groups#show”是指，groups_controller.rb里的show  action。之前一直以为这个地方是指views里，groups文件夹里的show.html.erb文件。 2.routes文件里的内容也是有优先级的，会先执行上面的路径">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/006tNbRwly1fgmbxvcqbfj30ux01iaar.jpg">
 
 
 
@@ -325,6 +331,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -352,7 +380,18 @@
       
 
       
-        
+        <p>1.在代码<code>get &#39;groups/:id, :to =&gt; &quot;groups#show&quot;</code>里，”groups#show”是指，groups_controller.rb里的show  action。之前一直以为这个地方是指views里，groups文件夹里的show.html.erb文件。</p>
+<p>2.routes文件里的内容也是有优先级的，会先执行上面的路径<br><a id="more"></a></p>
+<p>3.类似于<code>groups_path</code>或<code>groups_url</code>的东西，其实是named routes帮我们产生的URL helper。named routes可以通过这个例子来理解：<code>resources :groups</code>，这个是我们很常见的代码。仅仅是一个groups的名字，就可以生出index,new,show,create,edit,update,destroy这7个动作对应的path，也就是named routes为我们产生的helper。这些helper可以直接在views文件，controller文件使用。其中<code>groups_path</code>是相对路径，<code>groups_url</code>是绝对路径。大部分时候使用前者</p>
+<p>4.如果要新增一个get的路径，我们有两种写法：<br>  <code>get &quot;account/groups&quot; =&gt; &quot;account#groups&quot;</code><br>  <code>match &quot;account/groups&quot; =&gt; &quot;account#groups&quot;, :via =&gt; :get</code><br>  后面那条代码是通过via来做动词限定，get就是动词</p>
+<p>5.我们也可以自己来DIY路径，使用scope这个东东来做，namespace就是scope的一种应用。这个我们在rails101里实作“发表的文章”，“参与的群组”时用过，在joblisting里的后台功能也用过</p>
+<p>6.我们也可以在路径里加一些限制条件，这样来做就好：<br>  <code>:constraints =&gt; {...}</code><br>  其中大括号里是具体要限制的内容，可以使用正则表达式来实现，比如说，我想要限制id是整数：<br><code>constraints =&gt; {:id =&gt; /\d/}</code></p>
+<p>7.我们经常这样写<code>resources :groups</code>,而且，我们也可以这样写<code>resources :group</code>。单数复数都可以。区别是，单数的那个就没有index对应的路径了</p>
+<p>8.我们在写这样的代码时：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">resources <span class="symbol">:groups</span> <span class="keyword">do</span></div><div class="line">	resources <span class="symbol">:posts</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure></p>
+<p>这种写法名称叫做nested resources（套叠）<br>在这种写法下，如果我们使用helper时要注意这样变量的问题：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">group_posts_path(@group)</div><div class="line">group_post_path(@group, @post)</div></pre></td></tr></table></figure></p>
+<p>上面的例子中，如果是复数时，就不需要在括号里加变量指定是哪一个，比如说第一行代码就没有 @post<br>如果是单数，就需要使用变量来指定，比如说第二条代码，需要在括号里写上两个变量才可以<br>这个部分rails101有一个例子<br><img src="http://ww1.sinaimg.cn/large/006tNbRwly1fgmbxvcqbfj30ux01iaar.jpg" alt=""><br>这两条代码第一次看的时候不明白路径后面为什么括号里有那么多东东，现在来看就很好理解了，那<code>edit_group_post_path(post.group, post)</code>来举例，因为路径里group和post都是单数，所以需要在括号里加变量，来指定到底是哪一个group，哪一个post。</p>
+<p>9.当我们输入<code>resources :groups</code>时，会产生7个动作对应的路径，这时，我们也有方法来设定需要哪些，不需要哪些：<br><code>:except =&gt; [:index]</code> (除了index的另外6个）<br><code>:only =&gt; [:index]</code> （只要index这一个）</p>
+
       
     </div>
     
@@ -366,6 +405,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术-Ruby/" rel="tag"># 技术 Ruby</a>
+          
+        </div>
       
 
       
@@ -477,7 +522,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

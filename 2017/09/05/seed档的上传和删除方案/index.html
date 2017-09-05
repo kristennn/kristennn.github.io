@@ -79,7 +79,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="技术 Ruby," />
 
 
 
@@ -95,14 +95,24 @@
 
 
 
+<meta name="description" content="如何将seed档文件上传到heroku?step1: 新增seed 文件, 然后在终端输入rake db:seed以我的专案为例，输入Character的16种属性:">
+<meta name="keywords" content="技术 Ruby">
 <meta property="og:type" content="article">
 <meta property="og:title" content="seed档的上传和删除方案">
 <meta property="og:url" content="http://yoursite.com/2017/09/05/seed档的上传和删除方案/index.html">
 <meta property="og:site_name" content="Kristen&#39;s Life">
+<meta property="og:description" content="如何将seed档文件上传到heroku?step1: 新增seed 文件, 然后在终端输入rake db:seed以我的专案为例，输入Character的16种属性:">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-05T07:13:32.000Z">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tKfTcgy1ff2fi5tabbj30w10jtk0h.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tKfTcgy1ff37k2epbej30ql0h4q44.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/006tKfTcgy1ff2fssxr10j30ql0h4dgv.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tKfTcgy1ff2g1gxgdgj30i204ewfe.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tKfTcgy1ff2g3ccawdj30qc0iwdh3.jpg">
+<meta property="og:updated_time" content="2017-09-05T08:05:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="seed档的上传和删除方案">
+<meta name="twitter:description" content="如何将seed档文件上传到heroku?step1: 新增seed 文件, 然后在终端输入rake db:seed以我的专案为例，输入Character的16种属性:">
+<meta name="twitter:image" content="http://ww3.sinaimg.cn/large/006tKfTcgy1ff2fi5tabbj30w10jtk0h.jpg">
 
 
 
@@ -325,6 +335,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -352,7 +384,9 @@
       
 
       
-        
+        <h2 id="如何将seed档文件上传到heroku"><a href="#如何将seed档文件上传到heroku" class="headerlink" title="如何将seed档文件上传到heroku?"></a>如何将seed档文件上传到heroku?</h2><p>step1: 新增seed 文件, 然后在终端输入<code>rake db:seed</code>以我的专案为例，输入Character的16种属性:<br><a id="more"></a><br><img src="http://ww3.sinaimg.cn/large/006tKfTcgy1ff2fi5tabbj30w10jtk0h.jpg" alt=""><br>step2: <code>git add .</code> <code>`git commit -m &quot;你的变动描述&quot;</code> 先将变动列入追踪，照上快照<br>step3: 执行命令<code>git push heroku 你目前的分支名:master</code>，记得要先用<code>heroku login</code>登录账户（这一步是将最新的变动push到heroku上）<br>step4: 执行命令<code>heroku run rake db:migrate</code>，将heroku上的数据库更新到最新<br>step5：执行命令<code>heroku rake db:seed</code>将seed档更新到heroku上<br><img src="http://ww3.sinaimg.cn/large/006tKfTcgy1ff37k2epbej30ql0h4q44.jpg" alt=""><br>输入<code>heroku open</code> 看结果如何：<br><img src="http://ww2.sinaimg.cn/large/006tKfTcgy1ff2fssxr10j30ql0h4dgv.jpg" alt=""><br>至此，我们的seed文件就成功上传到heroku啦~</p>
+<h2 id="如何删除已经上传到heroku上的seed文件呢？"><a href="#如何删除已经上传到heroku上的seed文件呢？" class="headerlink" title="如何删除已经上传到heroku上的seed文件呢？"></a>如何删除已经上传到heroku上的seed文件呢？</h2><p>以我的专案为例，想要删除所有的characters,那我们只要输入下面这两条指令就好啦：<code>heroku rails c</code>  <code>Character.delete_all</code><br><img src="http://ww4.sinaimg.cn/large/006tKfTcgy1ff2g1gxgdgj30i204ewfe.jpg" alt=""><br>这样就可以直接把heroku上所有的Character都删掉了。你可以在seed档里重新修改，然后按照上面的上传教程再一次上传，就搞定啦~结果如下：<br><img src="http://ww3.sinaimg.cn/large/006tKfTcgy1ff2g3ccawdj30qc0iwdh3.jpg" alt=""></p>
+
       
     </div>
     
@@ -366,6 +400,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术-Ruby/" rel="tag"># 技术 Ruby</a>
+          
+        </div>
       
 
       
@@ -440,8 +480,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <p class="site-author-name" itemprop="name">Kristen</p>
@@ -477,7 +526,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -502,6 +551,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何将seed档文件上传到heroku"><span class="nav-number">1.</span> <span class="nav-text">如何将seed档文件上传到heroku?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何删除已经上传到heroku上的seed文件呢？"><span class="nav-number">2.</span> <span class="nav-text">如何删除已经上传到heroku上的seed文件呢？</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
