@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[商城网站如何设计购物车及订单系统]]></title>
+    <url>%2F2017%2F09%2F05%2F%E5%95%86%E5%9F%8E%E7%BD%91%E7%AB%99%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E8%B4%AD%E7%89%A9%E8%BD%A6%E5%8F%8A%E8%AE%A2%E5%8D%95%E7%B3%BB%E7%BB%9F%2F</url>
+    <content type="text"></content>
+  </entry>
+  <entry>
+    <title><![CDATA[seed档的上传和删除方案]]></title>
+    <url>%2F2017%2F09%2F05%2Fseed%E6%A1%A3%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E5%88%A0%E9%99%A4%E6%96%B9%E6%A1%88%2F</url>
+    <content type="text"></content>
+  </entry>
+  <entry>
+    <title><![CDATA[routes学习笔记]]></title>
+    <url>%2F2017%2F09%2F05%2Froutes%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"></content>
+  </entry>
+  <entry>
+    <title><![CDATA[3步走自己手写CRUD]]></title>
+    <url>%2F2017%2F09%2F05%2F3%E6%AD%A5%E8%B5%B0%E8%87%AA%E5%B7%B1%E6%89%8B%E5%86%99CRUD%2F</url>
+    <content type="text"></content>
+  </entry>
+  <entry>
+    <title><![CDATA[通过http协议来理解cokkie和session]]></title>
+    <url>%2F2017%2F09%2F05%2F%E9%80%9A%E8%BF%87http%E5%8D%8F%E8%AE%AE%E6%9D%A5%E7%90%86%E8%A7%A3cokkie%E5%92%8Csession%2F</url>
+    <content type="text"><![CDATA[客户端和服务器是什么？客户端就是用户用来操作的地方，比如说我们之前做的专案里，浏览器就是客户端，客户端通过发送请求来和服务端进行交互（这里一定要定义好用来交互的action是什么，不然会出现问题） 服务器很好理解。比如说我们在做本地的专案，我们总要去启动rails s才能打开网页吧，这个就是服务器。我们比赛时把专案部署到了heroku，这个就是服务器。服务器的请求一般是get request。 为什么有cookie/session这种东西？因为我们现在在用的http协议，是一个无连接无状态的协议。 无连接就是说服务器和客户端的每次连接只处理一个问题，服务器收到请求，处理请求并收到客户端的应答后就会自动断开连接。为什么要这么设计呢？这是因为早期http被设计出来时，一个服务器要服务大量客户端的访问，如果不这么做限制的话，就会无端占用大量资源，导致运行缓慢 无状态用一句俗话说，就是这个协议是没有记性的。服务器不知道客户端是什么状态。当客户端发送一个请求，服务器处理好之后不会记录任何信息。（举例说：我在一个网上商店申请了账号并登陆，在登录这个动作完成之后，我进行下一个动作时，比如加入商品到购物车，服务器就已经忘了，我是不是已经登录了） 我们可以想象一下这会是一件多么麻烦的事，我发送一个请求，完成之后服务器就忘记了我是不是做过这件事。那如果我的请求需要之前请求的状态信息（比如购物车机制），那该怎么办？为了解决这个问题，session和cokkie应运而生 cokkie和session什么区别？ cokkie和session事实上都是在解决上面的问题 cokkie存储在客户端，session存储在服务端： cokkie的作用方式是：用户在浏览网站时服务器会发送cokkie到客户端—–&gt; 客户端将这部分cokkie保存——–&gt;之后每次客户端发送请求，客户端都会讲cokkie发送给服务端。也就是说，cokkie的数据都是保存在客户端的。这样一来就会有一个问题，cokkie的数据可以很轻易的在客户端进行修改，不够安全 session的作用方式是：session分成两部分：id和data。id的作用就像是一个索引一样，被存在客户端的cokkie种；data是session所存储的所有数据，被放在服务端。当客户端发送请求时，会带着含有session_id的cokkie给服务端。服务端通过session_id来找到存储在此的session_data。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[对于自动化测试的理解]]></title>
+    <url>%2F2017%2F09%2F05%2F%E5%AF%B9%E4%BA%8E%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E7%9A%84%E7%90%86%E8%A7%A3%2F</url>
+    <content type="text"><![CDATA[自动化测试是什么？ 自动化测试就是用程序来测试程序，来替代之前我们手动测试的方法（比如：打开浏览器检查页面，或者进入console页面来检查） 自动化测试也分为几个部分：单元测试（unit test)，整和测试(integration test)，验收测试(acceptance test)。这三者测试的代码粒度是由小到大的。单元测试是测试某一块代码的准确度，整合测试是测试几个组块间的互动是否正常，而验收测试则是站在使用者的角度，来思考这个程式有没有解决他们的需求。作为开发者，我们一般是在进行单元测试，或整合测试。因为我们是写这些程式的人，所以对程式内部的构造很了解，所以也被称作白箱测试。作为专业的测试工程师(QA)，则是进行最后的验收测试，他们不需要知道程序是怎么写的，只要知道这个程式需要完成什么样的需求就可以了，也被称为黑箱测试 为什么要使用自动化测试？ 使用自动化测试就是在赌我们写测试的时间一定会小于debug的时间，使用自动化测试可以得到即时的反馈 在做专案时，我们写好的程式并不是说写过就不要了，如果后来添加了新功能，或者说如果你想要重构自己的代码，担心把之前做的程式给搞烂掉，要怎么办呢？难道是手动把之前的程式再重新测试一遍吗？ 所以说，如果你的程式不是写一次就扔，那么自动化测试会帮你解决这个问题，要添加新功能之前执行一次测试码，就可以很确定啦 通过测试来写程序。我们写的测试案例其实就是我们想要实现的功能或解决的需求，那么我们先写测试码，然后根据测试码来写程式，这样的话就能将自己的设计更多的聚焦在解决需求上。 怎么来做自动化测试？ 首先，在ruby界使用最广泛的测试框架是rspec，我们就用这个来做，步骤如下： 在gemfile里添加gem包 gem &#39;rspec-rails&#39; 执行bundle， 执行rails g rspec:install，这条指令会产生四个文件：其中 .rspec文件用来放rspec的基本配置，用来更改终端上显示的格式和样式；spec文件夹用来放测试码，这里要注意的是测试码的命名问题，要与用来测试的程式文件名相呼应。比如说新建了一个要测试的文件叫 book.rb，那么好的习惯是在文件夹 spec下新建文件名为 book_spec.rb 的测试文件；spec_helper.rb文件用来放运行测试案例需要的配置文件，通过在每个测试文件里添加代码require spec_helper来引入 新建一个测试文件，举例如下：一块蛋糕30块，每买两块第二块都是半价，买三块的话只有第二块是半价，第三块是原价首先，建立文件，放置基本配置信息：composite_spec.rb123require_relative "./composite"#这个写的是被测试文件的路径，如果这里写错了，就找不到了require 'spec_helper' 然后，写pending：composite_spec.rb12345678describe "cake total price" do#双引号里的内容会显示在终端上，这里一般写的是要测试的类别 it "1 cake total price is 30"#每个it里都包含一个测试案例，双引号的内容会直接显示在终端上，描述具体要测试的内容，在这里，it后没有加do 和 end，这种写法叫做Pending，终端不会执行pending，而是会将双引号内的内容显示为黄色的，你可以理解为测试码的“大纲” it "2 cake total price is 45" it "3 cake total price is 75" it "4 cake total price is 90"end 接下来，填进去一个案例，终端执行rspec composite_repc.rb，这个时候一定会爆红，因为我们的程式还没有写，下面我们就根据测试报错的提示一点点的进行程序的实作，（记住每次实作的程度只要可以通过当前的测试案例即可），通过一个案例，再去写下一个案例，再实作，全部的案例都测试通过之后，再来重构代码让代码更加简洁漂亮。这个过程也叫做red-green-refactor，也是rspec测试的核心思想composite_spec.rb12345678910111213141516171819describe "cake total price" do it "1 cake total price is 30" do result = total_price(1) expect(result).to eq(30) #在do和end之间可以写任意的ruby代码，通过rspec内置的expect方法来判断是否通过。可以理解为 期望实际的结果result等于30 end it "2 cake total price is 45" do result = total_price(2) expect(result).to eq(45) end it "3 cake total price is 75" do result = total_price(3) expect(result).to eq(75) end it "4 cake total price is 90" do result = total_price(4) expect(result).to eq(90) endend composite.rb123456789def total_price(m) a = 30 if m &gt; 1 &amp;&amp; m % 2 == 0 a = (a + a / 2) * m / 2 elsif m &gt; 1 &amp;&amp; m % 2 != 0 a = (m + 1) / 2 * a + a / 2 end return aend 这样就是rsec测试的基本流程啦 其他补充的点： TDD（test-driven development)和BDD(behavior-driven development)。前者是测试驱动开发，就是通过测试先来描述程序应该达到什么样的需求，再通过测试来实作程序，也是rspec的思想；后者是先做程序，测试只是为了来验证程序的结果 rspec里的before..do是干嘛的？就是把测试码案例里重复的内容拿出来 写测试码时，第一需求是易读性。这点可以和普通的程式码做对比，普通的代码通常会遵循一个原则：Don’t Repeat Yourself。在测试码里，易读性最重要。 以测试来驱动开发时，因为每次只满足一个需求，所以程式码一定会很冗杂，在当时我们不需要去管这个，在通过所有的测试案例之后，我们可以去思考写出的程式码里有何共性，有什么可以重构的空间，另外重构后也要执行测试确保代码正确 写测试案例时也有一个原则要遵循：每个测试案例都应该是有用的，换句话来讲，就是如果我去掉一块代码，那一定要有一个测试案例会报错，这样才证明我们写的测试码cover到了整个程式]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[My New Post]]></title>
+    <url>%2F2017%2F08%2F31%2FMy-New-Post%2F</url>
+    <content type="text"></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2017%2F08%2F31%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+  </entry>
+</search>
